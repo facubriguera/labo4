@@ -1,9 +1,9 @@
 from pydantic import BaseModel, EmailStr 
 from typing import List, Optional 
-from datetime import Date;
+from datetime import date;
 
 class Instription(BaseModel):
     id : int
     eventID : int
     userID: int
-    date_insc : Date
+    date_insc : date

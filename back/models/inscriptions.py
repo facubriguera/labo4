@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, Date, ForeignKey
 
 class Inscriptions(Base):
     __tablename__ = "inscriptions"
-    id = Column(Integer, primary_key=True)
-    event_id = Column(Integer, ForeignKey)
-    user_id = Column(Integer, ForeignKey)
+    inscrip_id = Column(Integer, primary_key=True)
+    event_id = Column(Integer, ForeignKey("events.event_id"))
+    user_id = Column(Integer, ForeignKey("users.user_id"))
     fecha_inscripcion = Column(Date)
