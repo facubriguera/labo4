@@ -1,4 +1,4 @@
-ACA SE CREAN LOS CRUDS DE LOS MODELOS
+ACA SE PONE LA CONEXION CON LA BASE DE DATOS
 Users: santi
 Inscription: leon
 Categoria: emma
