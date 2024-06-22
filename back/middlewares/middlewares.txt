@@ -1,1 +1,4 @@
 Cree este archivo para que la carpeta se suba al repo con normalidad - Santiago
+
+ACTUALIZACION 22-6:
+Copié y pegué lo mismo del modelo de archivo del profe (el que se llama final) - Facundo
