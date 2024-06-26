@@ -1,23 +1,19 @@
 from models.users import UserModel
 from schemas.users import User
 
-
-#Aca creo las operaciones CRUD para nuestro objeto de usuario.
-class UserService():
+class UserService:
     
-    def __init__(self, db) -> None:
+    def __init__(self, db):
         self.db = db
 
     def get_users(self):
-        result = self.db.query(UserModel).all()
-        return result
+        return self.db.query(UserModel).all()
 
     def get_user(self, user_id):
-        result = self.db.query(UserModel).filter(UserModel.user_id == user_id).first()
-        return result
+        return self.db.query(UserModel).filter(UserModel.user_id == user_id).first()
 
     def create_user(self, user_data: dict):
-        new_user = UserModel(**user_data)
+        new_user = UserModel(**user_data.dict())
         self.db.add(new_user)
         self.db.commit()
         return new_user.user_id
@@ -27,9 +23,7 @@ class UserService():
         for key, value in data.items():
             setattr(user, key, value)
         self.db.commit()
-        return
 
     def delete_user(self, user_id: int):
         self.db.query(UserModel).filter(UserModel.user_id == user_id).delete()
         self.db.commit()
-        return
