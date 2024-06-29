@@ -1,3 +1,5 @@
+CREATE DATABASE tpi;
+USE tpi;
 CREATE TABLE inscriptions (inscrip_id INT, event_id INT, user_id INT, fecha_inscripcion DATE, PRIMARY KEY(inscrip_id));
 CREATE TABLE users (user_id INT AUTO_INCREMENT, name VARCHAR(50), email VARCHAR(50) UNIQUE, password VARCHAR(40), rol ENUM('Cliente','Administrador'), PRIMARY KEY(user_id));
 CREATE TABLE categories (cat_id INT, nombre VARCHAR(50) UNIQUE, descripcion VARCHAR(100), PRIMARY KEY(cat_id));
