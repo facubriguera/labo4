@@ -37,9 +37,9 @@ def get_events_by_category(category: str = Query(min_length=5, max_length=15)) -
 
 
 @event_router.post('/events', tags=['eventos'], response_model=dict, status_code=201)
-def create_event(movie: Events) -> dict:
+def create_event(event: Events) -> dict:
     db = Session()
-    EventService(db).create_event(movie)
+    EventService(db).create_event(event)
     return JSONResponse(status_code=201, content={"message": "Se ha registrado la película"})
 
 

@@ -1,5 +1,5 @@
 from config.database import Base
-from sqlalchemy import Column, Integer, String, Enum, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 
 class Events(Base):
     __tablename__ = "events"
