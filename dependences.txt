@@ -1,0 +1,6 @@
+pip install fastapi
+pip install uvicorn
+pip install SQLAlchemy
+pip install jwt
+pip install mysql-connector-python
+pip install PyJWT
