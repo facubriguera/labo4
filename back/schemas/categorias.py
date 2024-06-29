@@ -2,6 +2,8 @@ from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 
 class Category(BaseModel):
-    id : int
+    cat_id : int
     nombre : str
     descripcion : str
+
+    

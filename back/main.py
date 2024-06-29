@@ -5,7 +5,7 @@ from middlewares.error_handler import ErrorHandler
 from fastapi.middleware.cors import CORSMiddleware
 from routers.user import user_router
 from routers.events import event_router
-#from routers.categorias import categorias_router
+from routers.categorias import category_router
 #from routers.ventas import ventas_router
 
 
@@ -28,7 +28,7 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(event_router)
-#app.include_router(categorias_router)
+app.include_router(category_router)
 #app.include_router(ventas_router)
 
 Base.metadata.create_all(bind=engine)
