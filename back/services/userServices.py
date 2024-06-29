@@ -13,6 +13,7 @@ class UserService:
         return self.db.query(UserModel).filter(UserModel.user_id == user_id).first()
 
     def create_user(self, user_data: dict):
+#        new_user = UserModel(name=user_data.name, email=user_data.email, password =user_data.password, rol=user_data.rol)
         new_user = UserModel(**user_data.dict())
         self.db.add(new_user)
         self.db.commit()

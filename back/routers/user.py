@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Literal
 from pydantic import BaseModel, EmailStr
 
 from config.database import Session  # Asegúrate de importar SessionLocal desde config.database
@@ -21,14 +21,14 @@ class User(BaseModel):
     name: str
     email: EmailStr
     password: str
-    rol: str
+    rol: Literal["Cliente", "Administrador"]
 
 class UserCreate(BaseModel):
-    id: int
+#    id: int
     name: str
     email: EmailStr
     password: str
-    rol: str
+    rol: Literal["Cliente", "Administrador"]
 
 class UserUpdate(BaseModel):
     name: str = None
