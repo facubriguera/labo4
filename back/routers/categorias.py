@@ -26,7 +26,7 @@ def get_category(cat_id: int = Path(..., ge=1)) -> CategorySchema:
 def create_category(nombre: str, descripcion: str) -> dict:
     db = Session()
     new_category = CategoryService(db).create_category(nombre, descripcion)
-    return JSONResponse(status_code=201, content={"message": "Categoría creada correctamente", "category": jsonable_encoder(new_category)})
+    return JSONResponse(status_code=201, content={"message": "Categoría creada con éxito", "category": jsonable_encoder(new_category)})
 
 @category_router.put('/categories/{cat_id}', tags=['categorias'], response_model=dict, status_code=200)
 def update_category(cat_id: int, category: CategorySchema) -> dict:

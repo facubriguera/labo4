@@ -1,38 +1,55 @@
-from config.database import Session
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from models.category import Category as CategoryModel
 from schemas.categorias import Category as CategorySchema
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 
-class CategoryService():
-    def __init__(self, db) -> None:
+class CategoryService:
+    def __init__(self, db: Session):
         self.db = db
 
     def get_categories(self):
-        categories = self.db.query(CategoryModel).all()
-        return categories
+        return self.db.query(CategoryModel).all()
 
-    def get_category(self, cat_id):
-        category = self.db.query(CategoryModel).filter(CategoryModel.cat_id == cat_id).first()
-        return category
+    def get_category(self, cat_id: int):
+        return self.db.query(CategoryModel).filter(CategoryModel.cat_id == cat_id).first()
 
-    def create_category(self, nombre: str, descripcion: str):
+    def create_category(self, nombre: str, descripcion: str) -> CategoryModel:
         new_category = CategoryModel(nombre=nombre, descripcion=descripcion)
-        self.db.add(new_category)
-        self.db.commit()
-        return new_category
+        try:
+            self.db.add(new_category)
+            self.db.commit()
+            self.db.refresh(new_category)
+            return new_category
+        except IntegrityError as e:
+            self.db.rollback()
+            # Aquí podrías manejar la excepción, por ejemplo, registrar el error o lanzar una excepción personalizada
+            raise e
 
-    def update_category(self, cat_id: int, category: CategorySchema):
-        category_db = self.db.query(CategoryModel).filter(CategoryModel.cat_id == cat_id).first()
+    def update_category(self, cat_id: int, category: CategorySchema) -> CategoryModel:
+        category_db = self.get_category(cat_id)
         if category_db:
             category_db.nombre = category.nombre
             category_db.descripcion = category.descripcion
-            self.db.commit()
-        return category_db
+            category_db.cat_id = category.cat_id
+            try:
+                self.db.commit()
+                self.db.refresh(category_db)
+                return category_db
+            except IntegrityError as e:
+                self.db.rollback()
+                # Manejar la excepción según sea necesario
+                raise e
+        return None  # Manejar el caso donde no se encontró la categoría
 
-    def delete_category(self, cat_id: int):
-        category = self.db.query(CategoryModel).filter(CategoryModel.cat_id == cat_id).first()
-        if category:
-            self.db.delete(category)
-            self.db.commit()
-        return category
+    def delete_category(self, cat_id: int) -> CategoryModel:
+        category_db = self.get_category(cat_id)
+        if category_db:
+            try:
+                self.db.delete(category_db)
+                self.db.commit()
+                return category_db
+            except IntegrityError as e:
+                self.db.rollback()
+                # Manejar la excepción según sea necesario
+                raise e
+        return None  # Manejar el caso donde no se encontró la categoría
