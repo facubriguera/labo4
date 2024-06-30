@@ -4,3 +4,6 @@ pip install SQLAlchemy
 pip install jwt
 pip install mysql-connector-python
 pip install PyJWT
+
+OPCIONAL SI USAMOS LO DE solucion_a_sesion.txt:
+pip install passlib
