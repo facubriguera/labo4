@@ -32,7 +32,7 @@ def get_event(id: int = Path(ge=1, le=2000)) -> Events:
 @event_router.get('/events/', tags=['eventos'], response_model=List[Events])
 def get_events_by_category(category: str = Query(min_length=5, max_length=15)) -> List[Events]:
     db = Session()
-    result = EventService(db).get_movies_by_category(category)
+    result = EventService(db).get_events_by_category(category)
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 
@@ -40,7 +40,7 @@ def get_events_by_category(category: str = Query(min_length=5, max_length=15)) -
 def create_event(event: Events) -> dict:
     db = Session()
     EventService(db).create_event(event)
-    return JSONResponse(status_code=201, content={"message": "Se ha registrado la película"})
+    return JSONResponse(status_code=201, content={"message": "Se ha registrado el evento."})
 
 
 @event_router.put('/events/{id}', tags=['eventos'], response_model=dict, status_code=200)
@@ -51,7 +51,7 @@ def update_event(id: int, event: Events)-> dict:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
     
     EventService(db).update_event(id, event)
-    return JSONResponse(status_code=200, content={"message": "Se ha modificado la película"})
+    return JSONResponse(status_code=200, content={"message": "Se ha modificado el evento."})
 
 
 @event_router.delete('/events/{id}', tags=['eventos'], response_model=dict, status_code=200)
@@ -61,7 +61,7 @@ def delete_event(id: int)-> dict:
     if not result:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
     EventService(db).delete_event(id)
-    return JSONResponse(status_code=200, content={"message": "Se ha eliminado la película"})
+    return JSONResponse(status_code=200, content={"message": "Se ha eliminado el evento."})
 
 @event_router.get('/events/{name}', tags=['eventos'], response_model=Events)
 def get_event_by_name(name: str) -> Events:
