@@ -9,21 +9,22 @@ class UserService:
     def get_users(self):
         return self.db.query(UserModel).all()
 
-    def get_user(self, user_id):
+    def get_user(self, user_id: int):
         return self.db.query(UserModel).filter(UserModel.user_id == user_id).first()
 
-    def create_user(self, user_data: dict):
-#        new_user = UserModel(name=user_data.name, email=user_data.email, password =user_data.password, rol=user_data.rol)
+    def create_user(self, user_data: User):
         new_user = UserModel(**user_data.dict())
         self.db.add(new_user)
         self.db.commit()
         return new_user.user_id
 
-    def update_user(self, user_id: int, data: dict):
+    def update_user(self, user_id: int, user_data: User):
         user = self.db.query(UserModel).filter(UserModel.user_id == user_id).first()
-        for key, value in data.items():
-            setattr(user, key, value)
-        self.db.commit()
+        if user:
+            for key, value in user_data.dict().items():
+                setattr(user, key, value)
+            self.db.commit()
+        return user
 
     def delete_user(self, user_id: int):
         self.db.query(UserModel).filter(UserModel.user_id == user_id).delete()
