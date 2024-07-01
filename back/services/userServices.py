@@ -16,7 +16,8 @@ class UserService:
         new_user = UserModel(**user_data.dict())
         self.db.add(new_user)
         self.db.commit()
-        return new_user.user_id
+        self.db.refresh(new_user)
+        return new_user
 
     def update_user(self, user_id: int, user_data: User):
         user = self.db.query(UserModel).filter(UserModel.user_id == user_id).first()

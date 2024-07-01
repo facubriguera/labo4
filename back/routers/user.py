@@ -17,14 +17,14 @@ def get_db():
         db.close()
 
 class User(BaseModel):
-    id: int
+    user_id: int
     name: str
     email: EmailStr
     password: str
     rol: Literal["Cliente", "Administrador"]
 
 class UserCreate(BaseModel):
-#    id: int
+    user_id: int
     name: str
     email: EmailStr
     password: str
@@ -36,25 +36,25 @@ class UserUpdate(BaseModel):
     password: str = None
     rol: str = None
 
-@user_router.get('/users', response_model=List[User], tags=['Usuarios'])
+@user_router.get('/users/', response_model=List[User], tags=['users'])
 def get_users(db: SessionSQL = Depends(get_db)):
     return UserService(db).get_users()
 
-@user_router.get('/users/{user_id}', response_model=User, tags=['Usuarios'])
+@user_router.get('/users/user_id/{user_id}', response_model=User, tags=['users'])
 def get_user(user_id: int, db: SessionSQL = Depends(get_db)):
     user = UserService(db).get_user(user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
 
-@user_router.post('/users', response_model=User, status_code=201, tags=['Usuarios'])
+@user_router.post('/users/', response_model=User, status_code=201, tags=['users'])
 def create_user(user: UserCreate, db: SessionSQL = Depends(get_db)):
     return UserService(db).create_user(user)
 
-@user_router.put('/users/{user_id}', response_model=User, tags=['Usuarios'])
+@user_router.put('/users/user_id/{user_id}', response_model=User, tags=['users'])
 def update_user(user_id: int, user: UserUpdate, db: SessionSQL = Depends(get_db)):
     return UserService(db).update_user(user_id, user)
 
-@user_router.delete('/users/{user_id}', response_model=dict, tags=['Usuarios'])
+@user_router.delete('/users/user_id/{user_id}', response_model=dict, tags=['users'])
 def delete_user(user_id: int, db: SessionSQL = Depends(get_db)):
     return UserService(db).delete_user(user_id)

@@ -18,7 +18,7 @@ class InscripcionService():
     def create_inscripcion(self, inscripcion: InscripcionSchema):
         lista = self.get_inscripciones()
         idDuplicados(inscripcion, lista)
-        new_inscripcion = InscripcionModel(**inscripcion.model_dump())
+        new_inscripcion = InscripcionModel(**inscripcion.model_dump(mode='json'))
         self.db.add(new_inscripcion)
         self.db.commit()
         return new_inscripcion
