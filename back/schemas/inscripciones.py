@@ -1,17 +1,10 @@
-from pydantic import BaseModel, EmailStr 
-from typing import List, Optional 
-from datetime import date;
+from pydantic import BaseModel, Field
+from datetime import date
 
-class InscriptionBase(BaseModel):
-    id : int
-    eventID : int
-    userID: int
-    date_insc : date
 
-class InscriptionCreate(InscriptionBase):
-    pass
+class InscripcionSchema(BaseModel):
+    inscrip_id: int = Field (gt=0)
+    event_id: int = Field (gt=0)
+    user_id: int = Field (gt=0)
+    fecha_inscripcion: date
 
-class InscriptionHistory(InscriptionBase):
-    id: int
-    class Config:
-        orm_mode = True
