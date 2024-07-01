@@ -63,7 +63,7 @@ def delete_event(id: int)-> dict:
     EventService(db).delete_event(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el evento."})
 
-@event_router.get('/events/name/{name}', tags=['eventos'], response_model=Events)
+@event_router.get('/events/{name}', tags=['eventos'], response_model=Events)
 def get_event_by_name(name: str) -> Events:
     db = Session()
     result = EventService(db).get_event_by_name(name)
@@ -71,7 +71,7 @@ def get_event_by_name(name: str) -> Events:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@event_router.get('/events/description/{description}', tags=['eventos'], response_model=Events)
+@event_router.get('/events/{description}', tags=['eventos'], response_model=Events)
 def get_event_by_description(description:str) -> Events:
     db = Session()
     result = EventService(db).get_event_by_description(description)
