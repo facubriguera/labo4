@@ -47,13 +47,8 @@ def get_user(user_id: int, db: SessionSQL = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
 
-<<<<<<< HEAD
 @user_router.post('/users', response_model=User, status_code=201, tags=['Usuarios'])
 def create_user(user: UserCreate, db: SessionSQL = Depends(get_db)):
-=======
-@user_router.post('/users/', response_model=User, status_code=201, tags=['Usuarios'])
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
->>>>>>> 6613a478f942d55c8ae1f24cbc86a615637e89dc
     return UserService(db).create_user(user)
 
 @user_router.put('/users/{user_id}', response_model=User, tags=['Usuarios'])
