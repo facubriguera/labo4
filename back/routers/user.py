@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session as SessionSQL
 from typing import List, Literal
 from pydantic import BaseModel, EmailStr
 
@@ -37,24 +37,24 @@ class UserUpdate(BaseModel):
     rol: str = None
 
 @user_router.get('/users', response_model=List[User], tags=['Usuarios'])
-def get_users(db: Session = Depends(get_db)):
+def get_users(db: SessionSQL = Depends(get_db)):
     return UserService(db).get_users()
 
 @user_router.get('/users/{user_id}', response_model=User, tags=['Usuarios'])
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: SessionSQL = Depends(get_db)):
     user = UserService(db).get_user(user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
 
 @user_router.post('/users', response_model=User, status_code=201, tags=['Usuarios'])
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+def create_user(user: UserCreate, db: SessionSQL = Depends(get_db)):
     return UserService(db).create_user(user)
 
 @user_router.put('/users/{user_id}', response_model=User, tags=['Usuarios'])
-def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user: UserUpdate, db: SessionSQL = Depends(get_db)):
     return UserService(db).update_user(user_id, user)
 
 @user_router.delete('/users/{user_id}', response_model=dict, tags=['Usuarios'])
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+def delete_user(user_id: int, db: SessionSQL = Depends(get_db)):
     return UserService(db).delete_user(user_id)
