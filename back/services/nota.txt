@@ -1,5 +1,0 @@
-ACA SE CREAN LOS CRUDS DE LOS MODELOS
-Users: santi
-Inscription: leon
-Categoria: emma
-Eventos: facu
