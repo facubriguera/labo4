@@ -50,7 +50,7 @@ class InscripcionService():
         return result
     
 
-    def get_inscr_activ(self,cantidad:int):
+    def get_inscr_activ(self):
         today = date.today()
         cantidad_activas = (
             self.db.query(InscripcionModel)
