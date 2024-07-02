@@ -3,6 +3,7 @@ from schemas.inscripcion_schema import InscripcionSchema
 from utilss.validators import idDuplicados
 from datetime import date
 from models.evento_model import EventoModel
+
 class InscripcionService():
     def __init__(self, db) -> None:
         self.db = db
@@ -47,3 +48,15 @@ class InscripcionService():
             EventoModel.fecha_inicio >= today
         ).all()
         return result
+    
+
+    def get_inscr_activ(self,cantidad):
+        today = date.today()
+        cantidad_activas = (
+            self.db.query(InscripcionModel)
+            .join(EventoModel, InscripcionModel.evento_id == EventoModel.id)
+            .filter(EventoModel.fecha_inicio >= today)
+            .count()
+        )
+        return cantidad_activas
+

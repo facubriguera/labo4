@@ -58,10 +58,18 @@ def get_inscripcion_usuario(usuario_id: int):
         return JSONResponse(status_code=404, content={'message': "No se han encontrado inscripciones de este usuario"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@inscripcion_router.get('/inscripciones/usuario/{usuario_id}', tags=['Inscripciones'], response_model=dict)
+@inscripcion_router.get('/inscripciones/usuario/{usuario_id}/activas', tags=['Inscripciones'], response_model=dict)
 def get_inscripcion_usuario_activa(usuario_id: int):
     db = Session()
     result = InscripcionService(db).get_inscripcion_usuario_activa(usuario_id)
     if not result:
         return JSONResponse(status_code=404, content={'message': "El usuario no tiene inscripciones activas"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
+
+@inscripcion_router.get("/inscripciones/cantidad", tags=["Dashboards"], response_model=dict)
+def get_inscripciones_activas_contador(cantidad:int = None):
+    db = Session()
+    inscripcion_service = InscripcionService(db)
+    cantidad_activas = inscripcion_service.get_inscr_activ(cantidad)
+    db.close()
+    return JSONResponse(status_code=200, content={"Cantidad de Inscripciones Activas": cantidad_activas})
