@@ -46,6 +46,7 @@ function renderEventos(eventos) {
             <tr>
                 <td>${evento.id}</td>
                 <td>${evento.nombre}</td>
+                <td>${evento.descripcion}</td>
                 <td>${evento.fecha_inicio}</td>
                 <td>${evento.fecha_fin}</td>
                 <td>${evento.lugar}</td>
@@ -130,68 +131,91 @@ function filterByCategoria() {
 }
 
 // Función para guardar un evento (crear o actualizar)
+// Función para guardar un evento (crear o actualizar)
 function guardarEvento(event) {
     event.preventDefault();
-    
-    const id = document.getElementById('eventoId').value;
+
+    // Obtener valores del formulario
     const nombre = document.getElementById('eventoNombre').value;
     const descripcion = document.getElementById('eventoDescripcion').value;
-    const fecha_inicio = document.getElementById('eventoFechaInicio').value;
-    const fecha_fin = document.getElementById('eventoFechaFin').value;
+    const fechaInicio = document.getElementById('eventoFechaInicio').value;
+    const fechaFin = document.getElementById('eventoFechaFin').value;
     const lugar = document.getElementById('eventoLugar').value;
-    const cupos = document.getElementById('eventoCupos').value;
-    const categoria_id = document.getElementById('eventoCategoria').value;
+    const cupos = parseInt(document.getElementById('eventoCupos').value);
+    const categoriaId = parseInt(document.getElementById('eventoCategoria').value);
 
-    const evento = { id, nombre, descripcion, fecha_inicio, fecha_fin, lugar, cupos, categoria_id };
+    // Generar un id aleatorio para nuevos eventos
+    const id = Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
 
-    const method = id ? 'PUT' : 'POST';
-    const url = id ? `http://127.0.0.1:8000/eventos/${id}` : 'http://127.0.0.1:8000/eventos';
+    // Objeto con los datos del evento
+    const eventoData = {
+        id: id, // Usar el id generado para nuevos eventos
+        nombre: nombre,
+        descripcion: descripcion,
+        fecha_inicio: fechaInicio,
+        fecha_fin: fechaFin,
+        lugar: lugar,
+        cupos: cupos,
+        categoria_id: categoriaId
+    };
+ 
+    // Determinar si es una solicitud POST o PUT
+    let url = 'http://127.0.0.1:8000/eventos';
+    let method = 'POST';
 
+    // Verificar si hay un id existente para actualizar (PUT)
+    const eventoId = document.getElementById('eventoId').value;
+    if (eventoId) {
+        url += `/${eventoId}`;
+        method = 'PUT';
+    }
+   
+    // Enviar datos al backend mediante una solicitud POST o PUT
     fetch(url, {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getToken()}` // Obtener token JWT y añadirlo a la cabecera
+            'Authorization': `Bearer ${getToken()}` // Añadir token JWT a la cabecera
         },
-        body: JSON.stringify(evento)
+        body: JSON.stringify(eventoData)
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
+        if (response.ok) {
+            $('#eventoModal').modal('hide'); // Ocultar modal después de guardar
+            loadEventos(); // Volver a cargar eventos después de guardar
+        } else {
+            throw new Error('Error al guardar el evento');
         }
-        return response.json();
-    })
-    .then(data => {
-        loadEventos(); // Recargar eventos después de guardar
-        $('#eventoModal').modal('hide');
-        resetForm();
     })
     .catch(error => {
-        console.error('Error al guardar evento:', error);
+        console.error('Error:', error);
+        alert('Error al guardar el evento');
     });
 }
 
+
+
 // Función para eliminar un evento
 function deleteEvento(id) {
-    if (!confirm('¿Estás seguro de que quieres eliminar este evento?')) {
-        return;
+    if (confirm('¿Estás seguro de que quieres eliminar este evento?')) {
+        fetch(`http://127.0.0.1:8000/evento/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${getToken()}` // Añadir token JWT a la cabecera
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                loadEventos(); // Volver a cargar eventos después de eliminar
+            } else {
+                throw new Error('Error al eliminar el evento');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el evento');
+        });
     }
-
-    fetch(`http://127.0.0.1:8000/eventos/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${getToken()}` // Obtener token JWT y añadirlo a la cabecera
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
-        }
-        loadEventos(); // Recargar eventos después de eliminar
-    })
-    .catch(error => {
-        console.error('Error al eliminar evento:', error);
-    });
 }
 
 // Función para editar un evento (cargar datos en el formulario)
@@ -230,6 +254,53 @@ function resetForm() {
     document.getElementById('eventoId').value = '';
 }
 
+function buscarEventosPorNombre() {
+    const nombre = document.getElementById('nombreBuscar').value;
+    fetch(`http://127.0.0.1:8000/eventos?nombre=${encodeURIComponent(nombre)}`, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}` // Obtener token JWT y añadirlo a la cabecera
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        renderEventos(data);
+    })
+    .catch(error => {
+        console.error('Error al filtrar eventos:', error);
+    });
+}
+
+function buscarEventosPorDescripcion() {
+    const nombre = document.getElementById('descripcionBuscar').value;
+    fetch(`http://127.0.0.1:8000/eventos?descripcion=${encodeURIComponent(nombre)}`, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}` // Obtener token JWT y añadirlo a la cabecera
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        renderEventos(data);
+    })
+    .catch(error => {
+        console.error('Error al filtrar eventos:', error);
+    });
+}
+
+function resetFormularioBuscar() {
+    document.getElementById('nombreBuscar').value = '';
+    document.getElementById('descripcionBuscar').value = '';
+    loadEventos();
+}
 // Inicializar carga de eventos y categorías al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     loadEventos();
