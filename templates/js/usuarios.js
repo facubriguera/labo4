@@ -46,6 +46,7 @@ async function listarUsuarios() {
                 <td>${usuario.id}</td>
                 <td>${usuario.nombre}</td>
                 <td>${usuario.email}</td>
+                <td>${usuario.rol}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editarUsuario(${usuario.id})">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
