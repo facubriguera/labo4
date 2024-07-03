@@ -1,3 +1,14 @@
+// Función para verificar si existe el token JWT en las cookies
+function checkTokenAndLoad() {
+    const token = getToken();
+    if (!token) {
+        // Redirigir al usuario al login si no hay token
+        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
+    } else {
+        loadInscripciones(); // Cargar las inscripciones si hay un token válido
+    }
+}
+
 // Función para cargar y mostrar inscripciones
 function loadInscripciones() {
     fetch('http://127.0.0.1:8000/inscripciones', {
@@ -5,7 +16,12 @@ function loadInscripciones() {
             'Authorization': `Bearer ${getToken()}` // Obtener token JWT y añadirlo a la cabecera
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al cargar inscripciones.');
+        }
+        return response.json();
+    })
     .then(data => {
         // Limpiar tabla antes de agregar datos nuevos
         const tableBody = document.getElementById('inscripcionTableBody');
@@ -30,6 +46,8 @@ function loadInscripciones() {
     })
     .catch(error => {
         console.error('Error al cargar inscripciones:', error);
+        alert('Error al cargar inscripciones. Por favor, inicie sesión nuevamente.');
+        window.location.href = '/login.html'; // Redirigir al login en caso de error
     });
 }
 
@@ -136,7 +154,7 @@ function getToken() {
 
 // Cargar inscripciones al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-    loadInscripciones();
+    checkTokenAndLoad(); // Verificar token al cargar la página
 
     // Asignar el evento submit al formulario de inscripción
     document.getElementById('inscripcionForm').addEventListener('submit', guardarInscripcion);

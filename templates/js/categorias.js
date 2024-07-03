@@ -1,3 +1,13 @@
+function checkTokenAndLoad() {
+    const token = getToken();
+    if (!token) {
+        // Redirigir al usuario al login si no hay token
+        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
+    } else {
+        loadInscripciones(); // Cargar las inscripciones si hay un token válido
+    }
+}
+
 // Función para cargar y mostrar categorías
 function loadCategories() {
     fetch('http://127.0.0.1:8000/categorias', {
@@ -134,6 +144,7 @@ function getToken() {
 
 // Cargar categorías al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
+    checkTokenAndLoad(); // Verificar token al cargar la página
     loadCategories();
 });
 
