@@ -1,12 +1,4 @@
-function checkTokenAndLoad() {
-    const token = getToken();
-    if (!token) {
-        // Redirigir al usuario al login si no hay token
-        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
-    } else {
-        loadInscripciones(); // Cargar las inscripciones si hay un token válido
-    }
-}
+
 
 // Función para cargar y mostrar categorías
 function loadCategories() {
@@ -128,7 +120,15 @@ function editCategoria(id) {
         alert('Error al cargar la categoría para editar.');
     });
 }
-
+function checkTokenAndLoad() {
+    const token = getToken();
+    if (!token) {
+        // Redirigir al usuario al login si no hay token
+        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
+    } else {
+        loadCategories(); // Cargar las inscripciones si hay un token válido
+    }
+}
 
 // Función para obtener el token JWT almacenado en las cookies
 function getToken() {

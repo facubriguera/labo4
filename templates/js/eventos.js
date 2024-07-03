@@ -1,13 +1,5 @@
 // Función para verificar si existe el token JWT en las cookies
-function checkTokenAndLoad() {
-    const token = getToken();
-    if (!token) {
-        // Redirigir al usuario al login si no hay token
-        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
-    } else {
-        loadEventos(); // Cargar los eventos si hay un token válido
-    }
-}
+
 
 // Función para cargar y mostrar eventos
 function loadEventos() {
@@ -37,7 +29,7 @@ function loadEventos() {
                     <td>${evento.fecha_fin}</td>
                     <td>${evento.lugar}</td>
                     <td>${evento.cupos}</td>
-                    <td>${evento.categoria.nombre}</td> <!-- Ajusta según la estructura del objeto de categoría -->
+                    <td>${evento.categoria_id}</td> <!-- Verificar si evento.categoria está definido -->
                     <td>
                         <button type="button" class="btn btn-info btn-sm" onclick="editEvento(${evento.id})">Editar</button>
                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteEvento(${evento.id})">Eliminar</button>
@@ -208,7 +200,15 @@ function getToken() {
     }
     return '';
 }
-
+function checkTokenAndLoad() {
+    const token = getToken();
+    if (!token) {
+        // Redirigir al usuario al login si no hay token
+        window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
+    } else {
+        loadEventos(); // Cargar los eventos si hay un token válido
+    }
+}
 // Cargar eventos y categorías al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
     checkTokenAndLoad();
