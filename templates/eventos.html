@@ -42,7 +42,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Fecha</th>
+                    <th>Fecha Inicio</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -63,15 +63,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="eventoForm">
+                    <form id="eventoForm" onsubmit="guardarEvento(event)">
+                        <input type="hidden" id="eventoId" >
                         <div class="form-group">
                             <label for="eventoNombre">Nombre</label>
-                            <input type="text" class="form-control" id="eventoNombre" required>
+                            <input type="text" class="form-control" id="eventoNombre" placeholder="Ingrese el nombre del evento" required>
                         </div>
                         <div class="form-group">
-                            <label for="eventoFecha">Fecha</label>
-                            <input type="date" class="form-control" id="eventoFecha" required>
+                            <label for="eventoDescripcion">Descripción</label>
+                            <input type="text" class="form-control" id="eventoDescripcion" placeholder="Ingrese la descripción del evento" required>
                         </div>
+                        <div class="form-group">
+                            <label for="eventoFechaInicio">Fecha de Inicio</label>
+                            <input type="date" class="form-control" id="eventoFechaInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventoFechaFin">Fecha de Fin</label>
+                            <input type="date" class="form-control" id="eventoFechaFin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventoLugar">Lugar</label>
+                            <input type="text" class="form-control" id="eventoLugar" placeholder="Ingrese el lugar del evento" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventoCupos">Cupos</label>
+                            <input type="number" class="form-control" id="eventoCupos" placeholder="Ingrese la cantidad de cupos disponibles" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventoCategoria">Categoría</label>
+                            <select class="form-control" id="eventoCategoria" required>
+                                <!-- Opciones de categorías cargadas dinámicamente -->
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
                 </div>

@@ -37,7 +37,7 @@ function loadCategories() {
 function guardarCategoria(event) {
     event.preventDefault();
     const action = document.getElementById('categoriaForm').getAttribute('data-action');
-    const id = document.getElementById('categoriaId').value;
+    const id = Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
     const nombre = document.getElementById('categoriaNombre').value;
     const descripcion = document.getElementById('categoriaDescripcion').value;
 
