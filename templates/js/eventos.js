@@ -40,6 +40,8 @@ function renderEventos(eventos) {
     tableBody.innerHTML = '';
 
     eventos.forEach(evento => {
+        //const categoriaNombre = evento.categoria ? evento.categoria.nombre : 'Sin categoría'; // Verificar si evento.categoria está definido
+
         const row = `
             <tr>
                 <td>${evento.id}</td>
@@ -48,7 +50,7 @@ function renderEventos(eventos) {
                 <td>${evento.fecha_fin}</td>
                 <td>${evento.lugar}</td>
                 <td>${evento.cupos}</td>
-                <td>${evento.categoria_id}</td>
+                <td>${evento.categoria_id}</td> <!-- Mostrar nombre de la categoría -->
                 <td>
                     <button type="button" class="btn btn-info btn-sm" onclick="editEvento(${evento.id})">Editar</button>
                     <button type="button" class="btn btn-danger btn-sm" onclick="deleteEvento(${evento.id})">Eliminar</button>
@@ -73,20 +75,29 @@ function loadCategorias() {
         return response.json();
     })
     .then(data => {
-        const selectCategoria = document.getElementById('categoriaFilter');
-        selectCategoria.innerHTML = ''; // Limpiar opciones actuales
+        const selectCategoriaFilter = document.getElementById('categoriaFilter');
+        const selectCategoriaEvento = document.getElementById('eventoCategoria');
 
-        // Añadir opción por defecto
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Todas las categorías';
-        selectCategoria.appendChild(defaultOption);
+        selectCategoriaFilter.innerHTML = ''; // Limpiar opciones actuales
+        selectCategoriaEvento.innerHTML = ''; // Limpiar opciones actuales
 
+        // Añadir opción por defecto al filtro
+        const defaultOptionFilter = document.createElement('option');
+        defaultOptionFilter.value = '';
+        defaultOptionFilter.textContent = 'Todas las categorías';
+        selectCategoriaFilter.appendChild(defaultOptionFilter);
+
+        // Añadir opciones al select de categoría en el formulario de evento
         data.forEach(categoria => {
-            const option = document.createElement('option');
-            option.value = categoria.id;
-            option.textContent = categoria.nombre;
-            selectCategoria.appendChild(option);
+            const optionFilter = document.createElement('option');
+            optionFilter.value = categoria.id;
+            optionFilter.textContent = categoria.nombre;
+            selectCategoriaFilter.appendChild(optionFilter);
+
+            const optionEvento = document.createElement('option');
+            optionEvento.value = categoria.id;
+            optionEvento.textContent = categoria.nombre;
+            selectCategoriaEvento.appendChild(optionEvento);
         });
     })
     .catch(error => {
@@ -151,7 +162,7 @@ function guardarEvento(event) {
         return response.json();
     })
     .then(data => {
-        loadEventos();
+        loadEventos(); // Recargar eventos después de guardar
         $('#eventoModal').modal('hide');
         resetForm();
     })
@@ -176,7 +187,7 @@ function deleteEvento(id) {
         if (!response.ok) {
             throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
         }
-        loadEventos();
+        loadEventos(); // Recargar eventos después de eliminar
     })
     .catch(error => {
         console.error('Error al eliminar evento:', error);
@@ -219,5 +230,7 @@ function resetForm() {
     document.getElementById('eventoId').value = '';
 }
 
-// Inicializar carga de eventos
-document.addEventListener('DOMContentLoaded', loadEventos);
+// Inicializar carga de eventos y categorías al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    loadEventos();
+});
