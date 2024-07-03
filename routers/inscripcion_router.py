@@ -72,3 +72,20 @@ def get_inscripciones_activas_contador():
     cantidad_activas = InscripcionService(db).get_inscr_activ()
     db.close()
     return JSONResponse(status_code=200, content={"Cantidad de Inscripciones Activas": cantidad_activas})
+
+@inscripcion_router.get('/inscripciones_promedio', tags=['Dashboards'], response_model=dict, status_code=200)
+def get_promedio_inscripciones_por_evento():
+    db = Session()
+    promedio_inscripciones = InscripcionService(db).get_promedio_inscripciones_por_evento()
+    db.close()
+    return JSONResponse(status_code=200, content={"promedio_inscripciones": promedio_inscripciones})
+
+@inscripcion_router.get('/inscripciones_evento_mas_inscripciones', tags=['Dashboards'], response_model=dict, status_code=200)
+def get_evento_con_mas_inscripciones():
+    db = Session()
+    result = InscripcionService(db).get_evento_con_mas_inscripciones()
+    db.close()
+    if result:
+        return JSONResponse(status_code=200, content=jsonable_encoder(result))
+    else:
+        return JSONResponse(status_code=404, content={"message": "No se encontraron inscripciones"})
