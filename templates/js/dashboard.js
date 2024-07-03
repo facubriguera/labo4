@@ -4,9 +4,7 @@ function checkTokenAndLoad() {
     if (!token) {
         // Redirigir al usuario al login si no hay token
         window.location.href = '/templates/login.html'; // Ajusta la ruta según tu aplicación
-    } else {
-        loadInscripciones(); // Cargar las inscripciones si hay un token válido
-    }
+    } 
 }
 
 document.addEventListener('DOMContentLoaded', function() {
