@@ -138,10 +138,10 @@ function guardarInscripcion(event) {
     const fecha_inscripcion = document.getElementById('inscripcionFecha').value;
 
     const data = {
-        id,
-        usuario_id,
-        evento_id,
-        fecha_inscripcion
+        id: id, 
+        usuario_id: usuario_id,
+        evento_id: evento_id,
+        fecha_inscripción: fecha_inscripcion
     };
 
     const url = action === 'editar' ? `http://127.0.0.1:8000/inscripciones/${id}` : 'http://127.0.0.1:8000/inscripciones';
