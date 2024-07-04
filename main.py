@@ -10,11 +10,7 @@ from routers.inscripcion_router import inscripcion_router
 from routers.userauth_router import userauth_router
 from middleware.error_handler import ErrorHandler
 from middleware.jwt_bearer import JWTBearer
-import databases
 
-# Configuración de la base de datos asincrónica
-DATABASE_URL = "mysql+aiomysql://root:admin@localhost:3306/tpi"
-database = databases.Database(DATABASE_URL)
 
 Base.metadata.create_all(bind=engine)
 
